@@ -14,3 +14,5 @@ This is officially our very first day of CoderSchool and out first day of the jo
 
 ### Note to self and future self:
 **You didn't come this far just to come this far**
+
+Let's test the pulling function
