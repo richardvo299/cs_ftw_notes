@@ -50,6 +50,18 @@ scoreImg.src = "score.png";
 // Game over Variables
 let gameOver = false; 
 
+// Sound Variables
+const hitSound = new Audio();
+hitSound.src = "hit.mp3";
+
+const winSound = new Audio();
+winSound.src = "win.mp3";
+
+const lifeLostSound = new Audio();
+lifeLostSound.src = "lifelost.mp3";
+
+const pointSound = new Audio();
+pointSound.src = "point.wav";
 /**********************/
 
 function createBricks() {
@@ -136,10 +148,17 @@ function ballBrickCollision() {
       let b = bricks[r][c];
       if (b.status) {
         if(x + ballRadius > b.x && x - ballRadius < b.x + brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight) {
+          pointSound.play();
           dy = -dy;
           console.log("hey you hit the brick");
           b.status = false;
           score += scoreUnit;
+          if(score == brickRowCount*brickColumnCount*scoreUnit) {
+            winSound.play();
+            alert("WINNER WINNER CHICKEN DINNER!");
+            document.location.reload();
+            clearInterval(interval);
+        }
         }
       }
     }
@@ -157,6 +176,7 @@ function update() {
   // hit the paddle
   if(x >= paddleX && x <= paddleX + paddleWidth) {
     if(y + ballRadius >= canvas.height - paddleHeight) {
+      hitSound.play();
       dy = -dy;
     }
   }
@@ -164,7 +184,12 @@ function update() {
   // hit the ground
   if (y + ballRadius > canvas.height) {
     life--;
-    resetBall();
+    lifeLostSound.play();
+    if(life == 0) {
+      alert("GO CRY IN THE CORNER!");
+      document.location.reload();
+      clearInterval(interval);}
+    else {resetBall();}
   }
   x = x + dx;
   y = y + dy;
